@@ -17,6 +17,7 @@ OUTPUT_PATH = os.path.abspath("./outputs/")
 SCREENSHOTS = f"{OUTPUT_PATH}/screenshots/"
 IMG_EXTENSION = ".png"
 CHUNK_SIZE = 300
+EXT_PATH = os.getenv("EXT_DIR")
 MAX_NAME_BYTES = 255
 INVALID_NAME_CHARS = re.compile(r'[\x00-\x1f\x7f\\/:*?"<>|]')
 WINDOWS_RESERVED = {
@@ -77,7 +78,11 @@ def get_images(playwright, url, img_folder, start_page, end_page, pbar):
     """
     context = playwright.chromium.launch_persistent_context(
             user_data_dir=USER_DATA_DIR,
-            headless=False,
+            headless=True,
+            args=[
+                f"--disable-extensions-except={EXT_PATH}",
+                f"--load-extension={EXT_PATH}",
+            ],
         )
 
     try:
